@@ -7,6 +7,13 @@ import (
 func Walk(x interface{}, fn func(input string)) {
 	val := getValue(x)
 
+	if val.Kind() == reflect.Slice {
+		for i := 0; i < val.Len(); i += 1 {
+			Walk(val.Index(i).Interface(), fn)
+		}
+		return
+	}
+
 	for i := 0; i < val.NumField(); i += 1 {
 		field := val.Field(i)
 
