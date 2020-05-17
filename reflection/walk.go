@@ -18,6 +18,10 @@ func Walk(x interface{}, fn func(input string)) {
 	case reflect.Slice, reflect.Array:
 		numOfVal = val.Len()
 		getField = val.Index
+	case reflect.Map:
+		for _, key := range val.MapKeys() {
+			Walk(val.MapIndex(key).Interface(), fn)
+		}
 	}
 
 	for i := 0; i < numOfVal; i += 1 {
