@@ -6,26 +6,22 @@ import (
 
 func Walk(x interface{}, fn func(input string)) {
 	val := getValue(x)
-	numOfVal := 0
-	var getField func(int) reflect.Value
 
 	switch val.Kind() {
 	case reflect.String:
 		fn(val.String())
 	case reflect.Struct:
-		numOfVal = val.NumField()
-		getField = val.Field
+		for i := 0; i < val.NumField(); i += 1 {
+			Walk(val.Field(i).Interface(), fn)
+		}
 	case reflect.Slice, reflect.Array:
-		numOfVal = val.Len()
-		getField = val.Index
+		for i := 0; i < val.Len(); i += 1 {
+			Walk(val.Index(i).Interface(), fn)
+		}
 	case reflect.Map:
 		for _, key := range val.MapKeys() {
 			Walk(val.MapIndex(key).Interface(), fn)
 		}
-	}
-
-	for i := 0; i < numOfVal; i += 1 {
-		Walk(getField(i).Interface(), fn)
 	}
 }
 
