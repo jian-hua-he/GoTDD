@@ -25,10 +25,10 @@ func TestCounter(t *testing.T) {
 		wg.Add(wantedCount)
 
 		for i := 0; i < wantedCount; i += 1 {
-			go func(wg *sync.WaitGroup) {
+			go func(wg *sync.WaitGroup, counter *Counter) {
 				counter.Inc()
 				wg.Done()
-			}(&wg)
+			}(&wg, &counter)
 		}
 		wg.Wait()
 
