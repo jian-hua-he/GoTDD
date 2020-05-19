@@ -1,36 +1,43 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 )
 
-type StubStore struct {
+type SpyStore struct {
 	response  string
 	cancelled bool
 }
 
-func (s *StubStore) Fetch() string {
+func (s *SpyStore) Fetch() string {
 	time.Sleep(100 * time.Millisecond)
 	return s.response
 }
 
-func (s *StubStore) Cancel() {
+func (s *SpyStore) Cancel() {
 	s.cancelled = true
 }
 
 func TestHandler(t *testing.T) {
-	data := "hello, world"
-	server := Server(&StubStore{data, false})
+	t.Run("tells store to cancel work if request is cancelled", func(t *testing.T) {
+		store := &SpyStore{response: "hello, world"}
+		server := Server(store)
 
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
-	resp := httptest.NewRecorder()
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
 
-	server.ServeHTTP(resp, req)
+		ctx, cancel := context.WithCancel(req.Context())
+		time.AfterFunc(5*time.Millisecond, cancel)
+		req = req.WithContext(ctx)
 
-	if resp.Body.String() != data {
-		t.Errorf(`got "%s", want "%s"`, resp.Body.String(), data)
-	}
+		resp := httptest.NewRecorder()
+		server.ServeHTTP(resp, req)
+
+		if !store.cancelled {
+			t.Errorf("store was not told to cancel")
+		}
+	})
 }
