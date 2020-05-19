@@ -1,12 +1,12 @@
-package main_test
+package main
 
 import (
 	"net/http"
-	"net/httptest"
+	"net/http/httptest"
 	"testing"
 )
 
-type SutbStore struct {
+type StubStore struct {
 	response string
 }
 
@@ -21,9 +21,9 @@ func TestHandler(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	resp := httptest.NewRecorder()
 
-	server.ServeHttp(resp, req)
+	server.ServeHTTP(resp, req)
 
-	if response.Body.String() != data {
-		t.Errorf(`got "%s", want "%s"`, response.Body.String(), data)
+	if resp.Body.String() != data {
+		t.Errorf(`got "%s", want "%s"`, resp.Body.String(), data)
 	}
 }
