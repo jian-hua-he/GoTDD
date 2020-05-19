@@ -24,7 +24,8 @@ func (s *SpyStore) Cancel() {
 
 func TestHandler(t *testing.T) {
 	t.Run("tells store to cancel work if request is cancelled", func(t *testing.T) {
-		store := &SpyStore{response: "hello, world"}
+		data := "hello, world"
+		store := &SpyStore{response: data}
 		server := Server(store)
 
 		req := httptest.NewRequest(http.MethodGet, "/", nil)
@@ -38,6 +39,25 @@ func TestHandler(t *testing.T) {
 
 		if !store.cancelled {
 			t.Errorf("store was not told to cancel")
+		}
+	})
+
+	t.Run("returns data from store", func(t *testing.T) {
+		data := "hello, world"
+		store := &SpyStore{response: data}
+		server := Server(store)
+
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
+		resp := httptest.NewRecorder()
+
+		server.ServeHTTP(resp, req)
+
+		if resp.Body.String() != data {
+			t.Errorf(`got "%s", want "%s"`, resp.Body.String(), data)
+		}
+
+		if store.cancelled {
+			t.Error("it should not have cancelled the store")
 		}
 	})
 }
