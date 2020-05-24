@@ -17,11 +17,14 @@ func TestRomanNumerals(t *testing.T) {
 			Arabic: 2,
 			Want:   "II",
 		},
+		"3 gets converted to III": {
+			Arabic: 3,
+			Want:   "III",
+		},
 	}
 
 	for n, c := range cases {
 		t.Run(n, func(t *testing.T) {
-
 			got := ConvertToRoman(c.Arabic)
 			want := c.Want
 
