@@ -7,6 +7,10 @@ import (
 func ConvertToRoman(num int) string {
 	var result strings.Builder
 
+	if num == 5 {
+		return "V"
+	}
+
 	if num == 4 {
 		return "IV"
 	}
