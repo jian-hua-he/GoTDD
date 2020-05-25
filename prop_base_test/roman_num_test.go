@@ -61,8 +61,8 @@ func TestConvertingToArabic(t *testing.T) {
 			got := ConvertToArabic(test.Roman)
 			want := test.Arabic
 
-			if got != test.Arabic {
-				t.Errorf("got %d, want %d", got, test.Arabic)
+			if got != want {
+				t.Errorf("got %d, want %d", got, want)
 			}
 		})
 	}
