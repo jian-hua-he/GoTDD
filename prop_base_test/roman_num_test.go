@@ -67,7 +67,7 @@ func TestRomanNumerals(t *testing.T) {
 		},
 		"40 gets converted to XL": {
 			Arabic: 40,
-			Want:   "XXXIX",
+			Want:   "XL",
 		},
 		"47 gets converted to XLVII": {
 			Arabic: 47,
