@@ -81,6 +81,50 @@ func TestRomanNumerals(t *testing.T) {
 			Arabic: 50,
 			Want:   "L",
 		},
+		"90 gets converted to XC": {
+			Arabic: 90,
+			Want:   "XC",
+		},
+		"100 gets converted to C": {
+			Arabic: 100,
+			Want:   "C",
+		},
+		"400 gets converted to CD": {
+			Arabic: 400,
+			Want:   "CD",
+		},
+		"500 gets converted to D": {
+			Arabic: 500,
+			Want:   "D",
+		},
+		"900 gets converted to CM": {
+			Arabic: 900,
+			Want:   "CM",
+		},
+		"1000 gets converted to M": {
+			Arabic: 1000,
+			Want:   "M",
+		},
+		"1984 gets converted to MCMLXXXIV": {
+			Arabic: 1984,
+			Want:   "MCMLXXXIV",
+		},
+		"3999 gets converted to MMMCMXCIX": {
+			Arabic: 3999,
+			Want:   "MMMCMXCIX",
+		},
+		"2014 gets converted to MMXIV": {
+			Arabic: 2014,
+			Want:   "MMXIV",
+		},
+		"1006 gets converted to MVI": {
+			Arabic: 1006,
+			Want:   "MVI",
+		},
+		"798 gets converted to DCCXCVIII": {
+			Arabic: 798,
+			Want:   "DCCXCVIII",
+		},
 	}
 
 	for n, c := range cases {
