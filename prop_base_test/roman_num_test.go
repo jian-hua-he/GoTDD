@@ -49,6 +49,22 @@ func TestRomanNumerals(t *testing.T) {
 			Arabic: 10,
 			Want:   "X",
 		},
+		"14 gets converted to XIV": {
+			Arabic: 14,
+			Want:   "XIV",
+		},
+		"18 gets converted to XVIII": {
+			Arabic: 18,
+			Want:   "XVIII",
+		},
+		"20 gets converted to XX": {
+			Arabic: 20,
+			Want:   "XX",
+		},
+		"39 gets converted to XXXIX": {
+			Arabic: 39,
+			Want:   "XXXIX",
+		},
 	}
 
 	for n, c := range cases {
