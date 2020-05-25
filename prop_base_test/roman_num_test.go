@@ -25,6 +25,10 @@ func TestRomanNumerals(t *testing.T) {
 			Arabic: 4,
 			Want:   "IV",
 		},
+		"5 gets converted to V": {
+			Arabic: 5,
+			Want:   "V",
+		},
 	}
 
 	for n, c := range cases {
