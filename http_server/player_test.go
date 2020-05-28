@@ -22,7 +22,7 @@ func TestGETPlayers(t *testing.T) {
 	})
 
 	t.Run("returns Floyd’s score", func(test *testing.T) {
-		req, _ := http.NewRequest(http.MethodGet, "/players/Pepper", nil)
+		req, _ := http.NewRequest(http.MethodGet, "/players/Floyd", nil)
 		resp := httptest.NewRecorder()
 
 		PlayerServer(resp, req)
