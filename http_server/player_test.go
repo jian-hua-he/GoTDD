@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -8,30 +9,32 @@ import (
 
 func TestGETPlayers(t *testing.T) {
 	t.Run("returns Pepper’s score", func(test *testing.T) {
-		req, _ := http.NewRequest(http.MethodGet, "/players/Pepper", nil)
+		req := getNewScoreRequest("Pepper")
 		resp := httptest.NewRecorder()
 
 		PlayerServer(resp, req)
 
-		got := resp.Body.String()
-		want := "20"
-
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
+		assertResponseBody(resp.Body.String(), "20")
 	})
 
 	t.Run("returns Floyd’s score", func(test *testing.T) {
-		req, _ := http.NewRequest(http.MethodGet, "/players/Floyd", nil)
+		req := getNewScoreRequest("Floyd")
 		resp := httptest.NewRecorder()
 
 		PlayerServer(resp, req)
 
-		got := resp.Body.String()
-		want := "10"
-
-		if got != want {
-			t.Errorf("got %q, want %q", got, want)
-		}
+		assertResponseBody(resp.Body.String(), "10")
 	})
+}
+
+func getNewScoreRequest(name string) *http.Request {
+	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/players/%s", name), nil)
+	return req
+}
+
+func assertResponseBody(t *testing.T, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("response body is wrong, got %q want %q", got, want)
+	}
 }
