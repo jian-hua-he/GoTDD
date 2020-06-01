@@ -14,7 +14,7 @@ func TestGETPlayers(t *testing.T) {
 
 		PlayerServer(resp, req)
 
-		assertResponseBody(resp.Body.String(), "20")
+		assertResponseBody(t, resp.Body.String(), "20")
 	})
 
 	t.Run("returns Floyd’s score", func(test *testing.T) {
@@ -23,7 +23,7 @@ func TestGETPlayers(t *testing.T) {
 
 		PlayerServer(resp, req)
 
-		assertResponseBody(resp.Body.String(), "10")
+		assertResponseBody(t, resp.Body.String(), "10")
 	})
 }
 
