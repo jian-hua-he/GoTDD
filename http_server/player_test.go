@@ -67,20 +67,39 @@ func assertResponseBody(t *testing.T, got, want string) {
 }
 
 func TestStoreWins(t *testing.T) {
-    store := StubPlayerStore{
-        map[string]int{},
-        make([]string, 0),
-    }
-    server := &PlayerServer{&store}
+	store := StubPlayerStore{
+		map[string]int{},
+		make([]string, 0),
+	}
+	server := &PlayerServer{&store}
 
-    t.Run("it returns accepted on POST", func(t *testing.T) {
-        req := newPostWinRequest("Pepper")
-        resp := httptest.NewRecorder()
+	t.Run("it returns accepted on POST", func(t *testing.T) {
+		req := newPostWinRequest("Pepper")
+		resp := httptest.NewRecorder()
 
-        server.ServeHTTP(resp, req)
+		server.ServeHTTP(resp, req)
 
-        assertStatus(t, resp.Code, http.StatusAccepted)
-    })
+		assertStatus(t, resp.Code, http.StatusAccepted)
+	})
+
+	t.Run("it records wins on POST", func(t *testing.T) {
+		player := "Pepper"
+
+		req := newPostWinRequest(player)
+		resp := httptest.NewRecorder()
+
+		server.ServeHTTP(resp, req)
+
+		assertStatus(t, resp.Code, http.StatusAccepted)
+
+		if len(store.winCalls) != 1 {
+			t.Fatalf("got %d calls to RecordWin want %d", len(store.winCalls), 1)
+		}
+
+		if store.winCalls[0] != player {
+			t.Errorf("did not store correct winner got %q want %q", store.winCalls[0], player)
+		}
+	})
 }
 
 func newPostWinRequest(name string) *http.Request {
