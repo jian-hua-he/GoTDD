@@ -13,6 +13,7 @@ func TestGETPlayers(t *testing.T) {
             "Pepper": 20,
             "Floyd": 10,
         },
+        make([]string, 0),
     }
     server := &PlayerServer{&store}
 
@@ -68,15 +69,21 @@ func assertResponseBody(t *testing.T, got, want string) {
 func TestStoreWins(t *testing.T) {
     store := StubPlayerStore{
         map[string]int{},
+        make([]string, 0),
     }
     server := &PlayerServer{&store}
 
     t.Run("it returns accepted on POST", func(t *testing.T) {
-        req, _ := http.NewRequest(http.MethodPost, "/players/Pepper", nil)
+        req := newPostWinRequest("Pepper")
         resp := httptest.NewRecorder()
 
         server.ServeHTTP(resp, req)
 
         assertStatus(t, resp.Code, http.StatusAccepted)
     })
+}
+
+func newPostWinRequest(name string) *http.Request{
+    req, _ := http.NewRequest(http.MethodPost, "/players/Pepper", nil)
+    return req
 }
