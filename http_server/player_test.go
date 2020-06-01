@@ -67,13 +67,13 @@ func assertResponseBody(t *testing.T, got, want string) {
 }
 
 func TestStoreWins(t *testing.T) {
-	store := StubPlayerStore{
-		map[string]int{},
-		make([]string, 0),
-	}
-	server := &PlayerServer{&store}
-
 	t.Run("it returns accepted on POST", func(t *testing.T) {
+		store := StubPlayerStore{
+			map[string]int{},
+			make([]string, 0),
+		}
+		server := &PlayerServer{&store}
+
 		req := newPostWinRequest("Pepper")
 		resp := httptest.NewRecorder()
 
@@ -83,8 +83,13 @@ func TestStoreWins(t *testing.T) {
 	})
 
 	t.Run("it records wins on POST", func(t *testing.T) {
-		player := "Pepper"
+		store := StubPlayerStore{
+			map[string]int{},
+			make([]string, 0),
+		}
+		server := &PlayerServer{&store}
 
+		player := "Pepper"
 		req := newPostWinRequest(player)
 		resp := httptest.NewRecorder()
 
