@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -124,6 +125,11 @@ func TestLeague(t *testing.T) {
 		resp := httptest.NewRecorder()
 
 		server.ServeHTTP(resp, req)
+
+		var got []Player
+		if err := json.NewDecoder(resp.Body).Decode(&got); err != nil {
+			t.Fatalf("Unable to parse response from server %q into slice of Player, '%v'", resp.Body, err)
+		}
 
 		assertStatus(t, resp.Code, http.StatusOK)
 	})
