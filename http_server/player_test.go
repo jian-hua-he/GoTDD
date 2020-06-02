@@ -52,20 +52,6 @@ func newGetScoreRequest(name string) *http.Request {
 	return req
 }
 
-func assertStatus(t *testing.T, got, want int) {
-	t.Helper()
-	if got != want {
-		t.Errorf("did not get correct status, got %d, want %d", got, want)
-	}
-}
-
-func assertResponseBody(t *testing.T, got, want string) {
-	t.Helper()
-	if got != want {
-		t.Errorf("response body is wrong, got %q want %q", got, want)
-	}
-}
-
 func TestStoreWins(t *testing.T) {
 	t.Run("it returns accepted on POST", func(t *testing.T) {
 		store := StubPlayerStore{
@@ -127,4 +113,32 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	assertStatus(t, resp.Code, http.StatusOK)
 
 	assertResponseBody(t, resp.Body.String(), "3")
+}
+
+func TestLeague(t *testing.T) {
+	store := StubPlayerStore{}
+	server := &PlayerServer{&store}
+
+	t.Run("it returns 200 on /league", func(t *testing.T) {
+		req, _ := http.NewRequest(http.MethodGet, "/league", nil)
+		resp := httptest.NewRecorder()
+
+		server.ServeHTTP(resp, req)
+
+		assertStatus(t, resp.Code, http.StatusOK)
+	})
+}
+
+func assertStatus(t *testing.T, got, want int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("did not get correct status, got %d, want %d", got, want)
+	}
+}
+
+func assertResponseBody(t *testing.T, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("response body is wrong, got %q want %q", got, want)
+	}
 }
