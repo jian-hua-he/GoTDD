@@ -15,6 +15,7 @@ func TestGETPlayers(t *testing.T) {
 			"Floyd":  10,
 		},
 		make([]string, 0),
+		make([]Player, 0),
 	}
 	server := NewPlayerServer(&store)
 
@@ -58,6 +59,7 @@ func TestStoreWins(t *testing.T) {
 		store := StubPlayerStore{
 			map[string]int{},
 			make([]string, 0),
+			make([]Player, 0),
 		}
 		server := NewPlayerServer(&store)
 
@@ -73,6 +75,7 @@ func TestStoreWins(t *testing.T) {
 		store := StubPlayerStore{
 			map[string]int{},
 			make([]string, 0),
+			make([]Player, 0),
 		}
 		server := NewPlayerServer(&store)
 
