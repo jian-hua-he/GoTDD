@@ -158,6 +158,10 @@ func TestLeague(t *testing.T) {
 		assertStatus(t, resp.Code, http.StatusOK)
 		assertLeague(t, got, want)
 
+		if resp.Result().Header.Get("content-type") != "application/json" {
+			t.Errorf("response did not have content-type of application/json got %v", resp.Result().Header)
+		}
+
 		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got %v want %v", got, want)
 		}
