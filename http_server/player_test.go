@@ -156,7 +156,7 @@ func TestLeague(t *testing.T) {
 
 		server.ServeHTTP(resp, req)
 
-		got := getleagueFromRequest(t, resp.Body)
+		got := getLeagueFromResponse(t, resp.Body)
 		assertStatus(t, resp.Code, http.StatusOK)
 		assertLeague(t, got, want)
 		assertContentType(t, resp, jsonContentType)
@@ -168,7 +168,7 @@ func newLeagueRequest() *http.Request {
 	return req
 }
 
-func getleagueFromRequest(t *testing.T, body io.Reader) (league []Player) {
+func getLeagueFromResponse(t *testing.T, body io.Reader) (league []Player) {
 	t.Helper()
 	err := json.NewDecoder(body).Decode(&league)
 	if err != nil {
