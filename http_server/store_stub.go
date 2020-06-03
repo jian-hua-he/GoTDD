@@ -14,3 +14,7 @@ func (s *StubPlayerStore) GetPlayerScore(name string) int {
 func (s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
+
+func (s *StubPlayerStore) GetLeague() []Player {
+	return s.league
+}
