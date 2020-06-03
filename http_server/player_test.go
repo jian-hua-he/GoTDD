@@ -115,12 +115,25 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
 	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
 
-	resp := httptest.NewRecorder()
-	server.ServeHTTP(resp, newGetScoreRequest(player))
+	t.Run("get score", func(t *testing.T) {
+		resp := httptest.NewRecorder()
+		server.ServeHTTP(resp, newGetScoreRequest(player))
+		assertStatus(t, resp.Code, http.StatusOK)
+		assertResponseBody(t, resp.Body.String(), "3")
+	})
 
-	assertStatus(t, resp.Code, http.StatusOK)
+	t.Run("get league", func(t *testing.T) {
+		resp := httptest.NewRecorder()
+		server.ServeHTTP(resp, newLeagueRequest())
+		assertStatus(t, resp.Code, http.StatusOK)
 
-	assertResponseBody(t, resp.Body.String(), "3")
+		got := getLeagueFromResponse(t, resp.Body)
+		want := []Player{
+			{"Pepper", 3},
+		}
+
+		assertLeague(t, got, want)
+	})
 }
 
 func TestLeague(t *testing.T) {
