@@ -203,14 +203,12 @@ func TestFileSystemStore(t *testing.T) {
             {"Name": "Cleo", "Wins": 10},
             {"Name": "Chris", "Wins": 33}
         ]`)
-
 		store := FileSystemPlayerStore{db}
+
 		got := store.GetPlayerScore("Chris")
 		want := 33
 
-		if got != want {
-			t.Errorf("got %d want %d", got, want)
-		}
+		assertScoreEquals(t, got, want)
 	})
 }
 
@@ -233,6 +231,13 @@ func assertContentType(t *testing.T, resp *httptest.ResponseRecorder, want strin
 	t.Helper()
 	if resp.Result().Header.Get("content-type") != want {
 		t.Errorf("response did not have content-type of %s, got %v", want, resp.Result().Header)
+	}
+}
+
+func assertScoreEquals(t *testing.T, want, got int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("got %d want %d", got, want)
 	}
 }
 
