@@ -223,7 +223,7 @@ func TestFileSystemStore(t *testing.T) {
 		defer cleanDb()
 
 		store := FileSystemPlayerStore{db}
-		store.Records("Chris")
+		store.RecordWin("Chris")
 
 		got := store.GetPlayerScore("Chris")
 		want := 34
@@ -239,7 +239,7 @@ func TestFileSystemStore(t *testing.T) {
 		defer cleanDb()
 
 		store := FileSystemPlayerStore{db}
-		store.Records("Pepper")
+		store.RecordWin("Pepper")
 
 		got := store.GetPlayerScore("Pepper")
 		want := 1
