@@ -16,16 +16,6 @@ func (f *FileSystemPlayerStore) GetLeague() []Player {
 	return league
 }
 
-func NewLeague(rdr io.Reader) ([]Player, error) {
-	var league []Player
-	err := json.NewDecoder(rdr).Decode(&league)
-	if err != nil {
-		err = fmt.Errorf("problem parsing league, %v", err)
-	}
-
-	return league, err
-}
-
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
 	for _, player := range f.GetLeague() {
 		if player.Name == name {
@@ -34,4 +24,27 @@ func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
 	}
 
 	return 0
+}
+
+func (f *FileSystemPlayerStore) Records(name string) {
+	league := f.GetLeague()
+	for i, player := range league {
+		if player.Name == name {
+			league[i].Wins += 1
+			break
+		}
+	}
+
+	f.database.Seek(0, 0)
+	json.NewEncoder(f.database).Encode(league)
+}
+
+func NewLeague(rdr io.Reader) ([]Player, error) {
+	var league []Player
+	err := json.NewDecoder(rdr).Decode(&league)
+	if err != nil {
+		err = fmt.Errorf("problem parsing league, %v", err)
+	}
+
+	return league, err
 }
