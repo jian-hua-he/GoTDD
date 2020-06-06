@@ -25,3 +25,7 @@ func NewLeague(rdr io.Reader) ([]Player, error) {
 
 	return league, err
 }
+
+func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
+	return 0
+}
