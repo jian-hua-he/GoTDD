@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -173,6 +174,24 @@ func TestLeague(t *testing.T) {
 		assertStatus(t, resp.Code, http.StatusOK)
 		assertLeague(t, got, want)
 		assertContentType(t, resp, jsonContentType)
+	})
+}
+
+func TestFileSystemStore(t *testing.T) {
+	t.Run("/league from a reader", func(t *testing.T) {
+		db := strings.NewReader(`[
+            {"Name": "Cleo", "Wins": 10},
+            {"Name": "Chris", "Wins": 33},
+        ]`)
+
+		store := FileSystemPlayerStore{db}
+		got := store.GetLeague()
+		want := []Player{
+			{"Cleo", 10},
+			{"Chris", 33},
+		}
+
+		assertLeague(t, got, want)
 	})
 }
 
