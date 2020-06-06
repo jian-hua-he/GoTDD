@@ -27,5 +27,11 @@ func NewLeague(rdr io.Reader) ([]Player, error) {
 }
 
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
-	return 33
+	for _, player := range f.GetLeague() {
+		if player.Name == name {
+			return player.Wins
+		}
+	}
+
+	return 0
 }
