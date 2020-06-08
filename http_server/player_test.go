@@ -186,7 +186,9 @@ func TestFileSystemStore(t *testing.T) {
         ]`)
 		defer cleanDb()
 
-		store := NewFileSystemPlayerStore(db)
+		store, err := NewFileSystemPlayerStore(db)
+		assertNoError(t, err)
+
 		got := store.GetLeague()
 		want := []Player{
 			{"Cleo", 10},
@@ -207,7 +209,8 @@ func TestFileSystemStore(t *testing.T) {
         ]`)
 		defer cleanDb()
 
-		store := NewFileSystemPlayerStore(db)
+		store, err := NewFileSystemPlayerStore(db)
+		assertNoError(t, err)
 
 		got := store.GetPlayerScore("Chris")
 		want := 33
@@ -222,7 +225,8 @@ func TestFileSystemStore(t *testing.T) {
         ]`)
 		defer cleanDb()
 
-		store := NewFileSystemPlayerStore(db)
+		store, err := NewFileSystemPlayerStore(db)
+		assertNoError(t, err)
 		store.RecordWin("Chris")
 
 		got := store.GetPlayerScore("Chris")
@@ -238,7 +242,8 @@ func TestFileSystemStore(t *testing.T) {
 	    ]`)
 		defer cleanDb()
 
-		store := NewFileSystemPlayerStore(db)
+		store, err := NewFileSystemPlayerStore(db)
+		assertNoError(t, err)
 		store.RecordWin("Pepper")
 
 		got := store.GetPlayerScore("Pepper")
@@ -313,5 +318,12 @@ func assertResponseBody(t *testing.T, got, want string) {
 	t.Helper()
 	if got != want {
 		t.Errorf("response body is wrong, got %q want %q", got, want)
+	}
+}
+
+func assertNoError(t *testing.T, err error) {
+	t.Helper()
+	if err != nil {
+		t.Fatalf("didn't expect an error but got one, %v", err)
 	}
 }
