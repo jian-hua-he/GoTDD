@@ -43,7 +43,6 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 		player.Wins += 1
 	}
 
-	f.database.Seek(0, 0)
 	json.NewEncoder(f.database).Encode(f.league)
 }
 
